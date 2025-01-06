@@ -1,0 +1,172 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Trail Management API"
+  description: "API for managing trails with authentication and role-based access control."
+
+host: "127.0.0.1:5000"
+basePath: "/"
+schemes:
+  - "http"
+
+paths:
+  /auth:
+    post:
+      summary: "Login"
+      description: "Authenticates a user and returns a JWT token."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              email:
+                type: "string"
+                example: "admin@example.com"
+              password:
+                type: "string"
+                example: "password"
+      responses:
+        200:
+          description: "Successful login"
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Email and password are required."
+        401:
+          description: "Invalid credentials"
+
+  /trails:
+    get:
+      summary: "Get All Trails"
+      description: "Fetches all trails in the database."
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "List of trails"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+        500:
+          description: "Internal server error"
+    post:
+      summary: "Create Trail"
+      description: "Creates a new trail. Admin privileges are required."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              TrailName:
+                type: "string"
+                example: "Sunny Trail"
+              TrailSummary:
+                type: "string"
+                example: "A beautiful loop trail."
+              TrailDescription:
+                type: "string"
+                example: "This trail offers amazing forest views."
+              Difficulty:
+                type: "string"
+                example: "Easy"
+              Location:
+                type: "string"
+                example: "Plymouth"
+              Length:
+                type: "number"
+                example: 3.5
+              ElevationGain:
+                type: "number"
+                example: 150
+              RouteID:
+                type: "integer"
+                example: 1
+      responses:
+        201:
+          description: "Trail created successfully"
+        403:
+          description: "Admin privileges required"
+        500:
+          description: "Internal server error"
+
+  /trails/{trail_id}:
+    get:
+      summary: "Get Trail"
+      description: "Fetches details of a specific trail by its ID."
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "trail_id"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Trail details"
+          schema:
+            type: "object"
+        404:
+          description: "Trail not found"
+        500:
+          description: "Internal server error"
+    put:
+      summary: "Update Trail"
+      description: "Updates details of a specific trail. Admin privileges are required."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "trail_id"
+          required: true
+          type: "integer"
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              TrailName:
+                type: "string"
+                example: "Updated Trail Name"
+      responses:
+        200:
+          description: "Trail updated successfully"
+        403:
+          description: "Admin privileges required"
+        500:
+          description: "Internal server error"
+    delete:
+      summary: "Delete Trail"
+      description: "Deletes a specific trail by its ID. Admin privileges are required."
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "trail_id"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Trail deleted successfully"
+        403:
+          description: "Admin privileges required"
+        500:
+          description: "Internal server error"

@@ -1,0 +1,3 @@
+CREATE SCHEMA CW2;
+
+GO
