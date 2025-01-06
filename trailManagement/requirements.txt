@@ -1,0 +1,6 @@
+Flask
+Flask-RESTful
+Flask-Cors
+flasgger
+pyjwt
+pyodbc
